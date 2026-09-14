@@ -5,3 +5,9 @@ __pycache__/
 .env
 *.log
 .pytest_cache/
+.ruff_cache/
+.coverage
+coverage.xml
+htmlcov/
+ui/auth/users.db
+*.db

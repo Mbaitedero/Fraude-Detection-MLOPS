@@ -1,46 +1,46 @@
 <div align="center">
 
-# 🛡️ Fraud Scoring Platform
+# Fraud Scoring Platform
 
 **Plateforme MLOps de détection de fraude bancaire — Scoring temps réel, supervision et gouvernance du modèle.**
 
-[![Python](https://img.shields.io/badge/Python-3.11-3776AB?style=for-the-badge&logo=python&logoColor=white)](https://www.python.org/)
-[![FastAPI](https://img.shields.io/badge/FastAPI-009688?style=for-the-badge&logo=fastapi&logoColor=white)](https://fastapi.tiangolo.com/)
-[![Dash](https://img.shields.io/badge/Dash-Plotly-3F4F75?style=for-the-badge&logo=plotly&logoColor=white)](https://dash.plotly.com/)
-[![MLflow](https://img.shields.io/badge/MLflow-3.8.1-0194E2?style=for-the-badge&logo=mlflow&logoColor=white)](https://mlflow.org/)
-[![Databricks](https://img.shields.io/badge/Databricks-FF3621?style=for-the-badge&logo=databricks&logoColor=white)](https://www.databricks.com/)
-[![Docker](https://img.shields.io/badge/Docker-2496ED?style=for-the-badge&logo=docker&logoColor=white)](https://www.docker.com/)
-[![License](https://img.shields.io/badge/License-Proprietary-red?style=for-the-badge)](#-licence)
+[![Python](https://img.shields.io/badge/Python-3.11-3776AB?style=flat-square&logo=python&logoColor=white)](https://www.python.org/)
+[![FastAPI](https://img.shields.io/badge/FastAPI-009688?style=flat-square&logo=fastapi&logoColor=white)](https://fastapi.tiangolo.com/)
+[![Dash](https://img.shields.io/badge/Dash-Plotly-3F4F75?style=flat-square&logo=plotly&logoColor=white)](https://dash.plotly.com/)
+[![MLflow](https://img.shields.io/badge/MLflow-3.8.1-0194E2?style=flat-square&logo=mlflow&logoColor=white)](https://mlflow.org/)
+[![Databricks](https://img.shields.io/badge/Databricks-FF3621?style=flat-square&logo=databricks&logoColor=white)](https://www.databricks.com/)
+[![Docker](https://img.shields.io/badge/Docker-2496ED?style=flat-square&logo=docker&logoColor=white)](https://www.docker.com/)
+[![License](https://img.shields.io/badge/License-Proprietary-red?style=flat-square)](#licence)
 
-[Documentation](#-api) · [Installation](#-installation-locale) · [Docker](#-lancement-avec-docker-compose) · [Sécurité](#-sécurité-et-exploitation)
+[Documentation](#api) · [Installation](#installation-locale) · [Docker](#lancement-avec-docker-compose) · [Sécurité](#sécurité-et-exploitation)
 
 </div>
 
 ---
 
-## 📖 Table des matières
+## Sommaire
 
-- [Vue d'ensemble](#-vue-densemble)
-- [Fonctionnalités](#-fonctionnalités)
-- [Stack technique](#-stack-technique)
-- [Prérequis](#-prérequis)
-- [Configuration](#-configuration)
-- [Installation locale](#-installation-locale)
-- [Lancement avec Docker Compose](#-lancement-avec-docker-compose)
-- [API](#-api)
-- [Tests et qualité](#-tests-et-qualité)
-- [Structure du dépôt](#-structure-du-dépôt)
-- [Sécurité et exploitation](#-sécurité-et-exploitation)
-- [Licence](#-licence)
+1. [Vue d'ensemble](#vue-densemble)
+2. [Fonctionnalités](#fonctionnalités)
+3. [Stack technique](#stack-technique)
+4. [Prérequis](#prérequis)
+5. [Configuration](#configuration)
+6. [Installation locale](#installation-locale)
+7. [Lancement avec Docker Compose](#lancement-avec-docker-compose)
+8. [API](#api)
+9. [Tests et qualité](#tests-et-qualité)
+10. [Structure du dépôt](#structure-du-dépôt)
+11. [Sécurité et exploitation](#sécurité-et-exploitation)
+12. [Licence](#licence)
 
 ---
 
-## 🎯 Vue d'ensemble
+## Vue d'ensemble
 
 La **Fraud Scoring Platform** est une plateforme de détection de fraude bancaire composée de trois briques complémentaires :
 
 - **Une API de scoring** (FastAPI) connectée au modèle champion MLflow hébergé sur Databricks/Unity Catalog.
-- **Une interface opérationnelle** (Dash) pour scorer une transaction à la demande ou consulter les scores batch.
+- **Une interface opérationnelle** (Dash) permettant de scorer une transaction à la demande ou de consulter les scores batch.
 - **Un dispositif de supervision** (Prometheus + Grafana) pour surveiller la santé du modèle et les performances de l'API.
 
 Le projet charge dynamiquement le modèle identifié par l'alias MLflow `champion`, applique les transformations nécessaires (encodeur ordinal), et retourne pour chaque transaction un score, une décision et un niveau de risque.
@@ -49,12 +49,12 @@ Le projet charge dynamiquement le modèle identifié par l'alias MLflow `champio
 
 ```mermaid
 flowchart LR
-    U[👤 Utilisateur] --> UI[🖥️ Interface Dash]
-    UI --> API[⚡ API FastAPI]
-    API --> M[🤖 Modèle champion MLflow]
-    API --> DB[(🗄️ Databricks SQL)]
-    API --> P[📊 Prometheus]
-    P --> G[📈 Grafana]
+    U[Utilisateur] --> UI[Interface Dash]
+    UI --> API[API FastAPI]
+    API --> M[Modèle champion MLflow]
+    API --> DB[Databricks SQL]
+    API --> P[Prometheus]
+    P --> G[Grafana]
 ```
 
 ### Parcours utilisateur
@@ -66,71 +66,56 @@ flowchart LR
 
 ---
 
-## ✨ Fonctionnalités
+## Fonctionnalités
 
-<table>
-<tr>
-<td width="50%" valign="top">
+### Scoring et Machine Learning
 
-### 🎯 Scoring & ML
 - Scoring unitaire via API REST et interface web
 - Scoring batch depuis Databricks SQL
 - Consultation du modèle champion et de ses métriques MLflow
 - Promotion d'une version au statut `champion` via l'API
 - Encodeur ordinal sérialisé (`joblib`) versionné
 
-</td>
-<td width="50%" valign="top">
+### Sécurité et gouvernance
 
-### 🔐 Sécurité & gouvernance
 - Authentification, inscription et sessions
 - Gestion des rôles (admin / analyst)
 - Journalisation des actions utilisateurs
 - Limitation de débit sur les endpoints sensibles
 - Validation stricte des entrées via Pydantic
 
-</td>
-</tr>
-<tr>
-<td width="50%" valign="top">
+### Expérience utilisateur
 
-### 🌍 Expérience utilisateur
-- Interface bilingue 🇫🇷 Français / 🇬🇧 English
+- Interface bilingue (Français / Anglais)
 - Thèmes clair et sombre
 - Monitoring MLOps : métriques, versions, drift
 - Export CSV et consultation des transactions notées
 
-</td>
-<td width="50%" valign="top">
+### Observabilité
 
-### 📊 Observabilité
 - Métriques HTTP exposées à Prometheus
 - Dashboards Grafana prêts à l'emploi
 - Endpoint `/health` agrégé (API, modèle, encodeur, Databricks)
 - Logs structurés
 
-</td>
-</tr>
-</table>
-
 ---
 
-## 🧰 Stack technique
+## Stack technique
 
 | Domaine | Technologies |
 | --- | --- |
-| **API** | FastAPI, Pydantic, Uvicorn |
-| **Interface** | Dash, Plotly |
-| **Machine Learning** | scikit-learn 1.6.1, MLflow 3.8.1, joblib |
-| **Données & registre** | Databricks SQL, Unity Catalog, MLflow Model Registry |
-| **Authentification** | SQLite, sessions Dash, hash Werkzeug |
-| **Observabilité** | Prometheus, Grafana, `prometheus-fastapi-instrumentator` |
-| **Qualité** | pytest, pytest-cov, Ruff |
-| **Déploiement** | Docker, Docker Compose |
+| API | FastAPI, Pydantic, Uvicorn |
+| Interface | Dash, Plotly |
+| Machine Learning | scikit-learn 1.6.1, MLflow 3.8.1, joblib |
+| Données et registre | Databricks SQL, Unity Catalog, MLflow Model Registry |
+| Authentification | SQLite, sessions Dash, hash Werkzeug |
+| Observabilité | Prometheus, Grafana, `prometheus-fastapi-instrumentator` |
+| Qualité | pytest, pytest-cov, Ruff |
+| Déploiement | Docker, Docker Compose |
 
 ---
 
-## 📋 Prérequis
+## Prérequis
 
 - **Python 3.11** ou **Docker Desktop**
 - Un workspace **Databricks** accessible via SQL Warehouse
@@ -139,25 +124,25 @@ flowchart LR
 
 ---
 
-## ⚙️ Configuration
+## Configuration
 
 La configuration est chargée depuis un fichier `.env` à la racine du projet.
 
-> ⚠️ **Important** — Ne placez jamais de jeton Databricks réel dans le dépôt ou dans une image Docker.
+> **Important** — Ne placez jamais de jeton Databricks réel dans le dépôt ou dans une image Docker.
 
 ```dotenv
-# ─── Databricks ────────────────────────────────
+# Databricks
 DATABRICKS_HOST=https://<workspace>.cloud.databricks.com
 DATABRICKS_TOKEN=<token>
 DATABRICKS_HTTP_PATH=/sql/1.0/warehouses/<warehouse-id>
 
-# ─── Modèle & registre ─────────────────────────
+# Modèle et registre
 CATALOG=pfa_data
 SCHEMA=ml_outputs
 MODEL_ALIAS=champion
 ENCODER_PATH=./models/ml_ordinal_encoder.joblib
 
-# ─── Services ──────────────────────────────────
+# Services
 API_HOST=0.0.0.0
 API_PORT=8000
 API_URL=http://localhost:8000
@@ -174,7 +159,7 @@ Le fichier `.env` est consommé à la fois par l'API et par l'interface.
 
 ---
 
-## 🚀 Installation locale
+## Installation locale
 
 ### 1. Créer et activer l'environnement virtuel
 
@@ -203,14 +188,14 @@ python -m ui.app
 
 | Service | URL |
 | --- | --- |
-| 🖥️ Interface de détection | [http://localhost:8050](http://localhost:8050) |
-| 📘 Documentation Swagger | [http://localhost:8000/docs](http://localhost:8000/docs) |
-| 📕 Documentation ReDoc | [http://localhost:8000/redoc](http://localhost:8000/redoc) |
-| 📊 Métriques Prometheus | [http://localhost:8000/metrics](http://localhost:8000/metrics) |
+| Interface de détection | [http://localhost:8050](http://localhost:8050) |
+| Documentation Swagger | [http://localhost:8000/docs](http://localhost:8000/docs) |
+| Documentation ReDoc | [http://localhost:8000/redoc](http://localhost:8000/redoc) |
+| Métriques Prometheus | [http://localhost:8000/metrics](http://localhost:8000/metrics) |
 
 ---
 
-## 🐳 Lancement avec Docker Compose
+## Lancement avec Docker Compose
 
 ```powershell
 docker compose up --build
@@ -231,11 +216,11 @@ docker compose up --build
 docker compose down
 ```
 
-> 💾 Les données Prometheus et Grafana sont conservées dans les volumes Docker `prometheus_data` et `grafana_data`.
+> Les données Prometheus et Grafana sont conservées dans les volumes Docker `prometheus_data` et `grafana_data`.
 
 ---
 
-## 🔌 API
+## API
 
 ### Endpoints
 
@@ -270,16 +255,16 @@ Invoke-RestMethod -Method Post `
 
 | Niveau de risque | Plage de score |
 | --- | --- |
-| 🟢 **Faible** | `< 0.2` |
-| 🟡 **Moyen** | `0.2 – 0.5` |
-| 🟠 **Élevé** | `0.5 – 0.8` |
-| 🔴 **Très élevé** | `≥ 0.8` |
+| Faible | `< 0.2` |
+| Moyen | `0.2 – 0.5` |
+| Élevé | `0.5 – 0.8` |
+| Très élevé | `≥ 0.8` |
 
 > Le seuil de décision fraude est fixé à **`0.5`**.
 
 ---
 
-## 🧪 Tests et qualité
+## Tests et qualité
 
 ```powershell
 # Lancer les tests
@@ -301,7 +286,7 @@ Les tests couvrent notamment :
 
 ---
 
-## 📁 Structure du dépôt
+## Structure du dépôt
 
 ```text
 Fraude_Scoring/
@@ -319,20 +304,20 @@ Fraude_Scoring/
 
 ---
 
-## 🔒 Sécurité et exploitation
+## Sécurité et exploitation
 
-> 🛡️ **Checklist avant mise en production**
+Checklist avant mise en production :
 
-- [ ] Utiliser **exclusivement des variables d'environnement** pour les secrets Databricks.
+- [ ] Utiliser exclusivement des variables d'environnement pour les secrets Databricks.
 - [ ] Restreindre `allow_origins` dans `api/main.py` à l'origine de l'interface avant toute mise en production publique.
-- [ ] Remplacer le **mot de passe Grafana** défini dans Compose.
+- [ ] Remplacer le mot de passe Grafana défini dans Compose.
 - [ ] Protéger les routes d'administration (`/versions` et `/promote/{version}`) derrière une authentification et une autorisation adaptées.
-- [ ] Surveiller `/health`, `/metrics` et les **logs structurés** lors des déploiements.
+- [ ] Surveiller `/health`, `/metrics` et les logs structurés lors des déploiements.
 - [ ] Activer HTTPS/TLS en production (reverse proxy Nginx ou Traefik).
 
 ---
 
-## 📄 Licence
+## Licence
 
 **Proprietary** — À préciser selon les conditions de distribution du projet.
 
