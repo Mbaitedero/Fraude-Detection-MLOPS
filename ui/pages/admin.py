@@ -109,7 +109,7 @@ def load_admin(_):
                                     className="alert-info")
         
         return champion_div, versions_div
-    except Exception as e:
+    except Exception as e:  # noqa: BLE001
         return html.Div(f"Erreur : {e}", className="alert-error"), html.Div()
 
 
@@ -144,5 +144,5 @@ def handle_promote(n_clicks_list):
             return html.Div(f"Version {version} promue en champion ! Rechargez pour voir.",
                             className="alert-success")
         return html.Div(f"Erreur : {r.text[:200]}", className="alert-error")
-    except Exception as e:
+    except Exception as e:  # noqa: BLE001
         return html.Div(f"Erreur : {e}", className="alert-error")

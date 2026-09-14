@@ -225,7 +225,7 @@ def handle_contact_message(n_clicks, nom, prenom, email, telephone, message):
             server.starttls()
             server.login(smtp_user, smtp_password)
             server.send_message(email_message)
-    except Exception:
+    except Exception:    # noqa: BLE001
         return html.Div(
             f"Message enregistré (référence #{message_id}), mais la notification "
             "email n'a pas pu être envoyée.",

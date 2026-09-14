@@ -86,7 +86,7 @@ def load_monitoring(_):
     try:
         r = requests.get(f"{api_url}/health", timeout=5)
         health = r.json() if r.status_code == 200 else {}
-    except Exception:
+    except Exception: # noqa: BLE001
         health = {}
     
     kpis = [
@@ -100,7 +100,7 @@ def load_monitoring(_):
     try:
         r = requests.get(f"{api_url}/batch?seuil=0.0&limit=40000", timeout=30)
         data = r.json() if r.status_code == 200 else []
-    except Exception:
+    except Exception: # noqa: BLE001
         data = []
     
     if not data:

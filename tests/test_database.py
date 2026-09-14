@@ -25,7 +25,7 @@ def temp_db():
     # Nettoyage
     try:
         os.unlink(tmp.name)
-    except Exception:
+    except Exception: # noqa: BLE001
         pass
 
 

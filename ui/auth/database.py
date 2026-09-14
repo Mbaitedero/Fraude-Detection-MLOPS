@@ -185,9 +185,9 @@ def create_user(nom, prenom, email, telephone, adresse, password, role="analyst"
         user_id = cursor.lastrowid
         conn.close()
         return True, user_id
-    except sqlite3.IntegrityError:
+    except sqlite3.IntegrityError: # noqa: BLE001
         return False, "Cet email est déjà utilisé."
-    except Exception as e:
+    except Exception as e: # noqa: BLE001
         return False, f"Erreur : {e}"
 
 
@@ -231,7 +231,7 @@ def authenticate(email, password):
             "langue": langue,
             "theme": theme,
         }
-    except Exception as e:
+    except Exception as e: # noqa: BLE001
         return False, f"Erreur : {e}"
 
 
@@ -294,9 +294,9 @@ def update_user_profile(user_id, nom, prenom, email, telephone, adresse,
         conn.commit()
         conn.close()
         return True, "Profil mis à jour."
-    except sqlite3.IntegrityError:
+    except sqlite3.IntegrityError: # noqa: BLE001
         return False, "Cet email est déjà utilisé."
-    except Exception as e:
+    except Exception as e:  # noqa: BLE001
         return False, f"Erreur : {e}"
 
 
@@ -389,7 +389,7 @@ def get_batch_imports(user_id, limit=5):
     for import_id, filename, raw_results, created_at in rows:
         try:
             results = json.loads(raw_results)
-        except (TypeError, json.JSONDecodeError):
+        except (TypeError, json.JSONDecodeError): # noqa: BLE001
             results = []
         imports.append({
             "id": import_id,
@@ -417,7 +417,7 @@ def create_alert(user_id, transaction_data, score, decision, niveau_risque="Éle
         alert_id = cursor.lastrowid
         conn.close()
         return alert_id
-    except Exception as e:
+    except Exception as e:   # noqa: BLE001
         print(f"Erreur création alerte : {e}")
         return None
 
@@ -440,7 +440,7 @@ def get_alerts(user_id, unread_only=False, limit=50):
     for r in rows:
         try:
             data = json.loads(r[1])
-        except Exception:
+        except Exception:  # noqa: BLE001
             data = {}
         alerts.append({
             "id": r[0],

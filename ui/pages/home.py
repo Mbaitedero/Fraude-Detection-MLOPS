@@ -23,7 +23,7 @@ def layout(session):
             kpis = r.json()
         else:
             error_msg = f"HTTP {r.status_code} — {r.text[:200]}"
-    except Exception as e:
+    except Exception as e: # noqa: BLE001
         error_msg = f"{type(e).__name__} : {e}"
     
     # ── Debug : log dans la console ──

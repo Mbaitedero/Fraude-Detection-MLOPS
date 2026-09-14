@@ -142,7 +142,7 @@ def get_all_versions_df() -> pd.DataFrame:
                 "run_id": v.run_id,
                 "user": run.data.tags.get("mlflow.user", "inconnu"),
             })
-        except Exception:
+        except Exception:  # noqa: BLE001
             continue
     if not rows:
         return pd.DataFrame()

@@ -147,7 +147,7 @@ def _format_date(value):
             "Juil.", "Août", "Sept.", "Oct.", "Nov.", "Déc.",
         ]
         return f"{date.day} {months[date.month - 1]} {date.year}, {date:%H:%M}"
-    except (TypeError, ValueError):
+    except (TypeError, ValueError): # noqa: BLE001
         return _display(value)
 
 

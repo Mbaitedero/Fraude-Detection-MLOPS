@@ -172,5 +172,5 @@ def score(n_clicks, montant, type_transaction, mode_paiement, heure,
             html.P(f"Décision : {result['decision']} — seuil champion 0.5",
                    className="result-detail"),
         ], className="result-card")
-    except Exception as e:
+    except Exception as e: # noqa: BLE001
         return html.Div(f"Erreur : {e}", className="alert-error")
