@@ -1,0 +1,9 @@
+FROM python:3.11-slim
+WORKDIR /app
+ENV PYTHONPATH=/app
+COPY requirements.txt .
+RUN --mount=type=cache,target=/root/.cache/pip \
+    pip install -r requirements.txt
+COPY . .
+EXPOSE 8050
+CMD ["python", "-m", "ui.app"]

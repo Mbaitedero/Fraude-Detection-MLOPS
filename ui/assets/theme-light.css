@@ -1,0 +1,15 @@
+/* Palette claire : les variables sont centralisees dans style.css. */
+:root {
+    --bg-app: #f8fafc;
+    --surface: #ffffff;
+    --surface-muted: #f1f5f9;
+    --sidebar: #0f172a;
+    --primary: #047857;
+    --primary-hover: #065f46;
+    --text-main: #1e293b;
+    --text-muted: #64748b;
+    --fraud: #be123c;
+    --normal: #15803d;
+    --warning: #d97706;
+    --border: #e2e8f0;
+}

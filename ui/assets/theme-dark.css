@@ -1,0 +1,15 @@
+/* Variante sombre de la palette fintech. */
+.theme-dark {
+    --bg-app: #0f172a;
+    --surface: #1e293b;
+    --surface-muted: #334155;
+    --sidebar: #0f172a;
+    --primary: #10b981;
+    --primary-hover: #34d399;
+    --text-main: #e2e8f0;
+    --text-muted: #94a3b8;
+    --fraud: #fb7185;
+    --normal: #4ade80;
+    --warning: #fbbf24;
+    --border: #475569;
+}

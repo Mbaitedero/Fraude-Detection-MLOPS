@@ -1,0 +1,16 @@
+name: CD — Build Docker
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build API
+        run: docker build -f Dockerfile.api -t pfa-fraud-api:${{ github.ref_name }} .
+      - name: Build UI
+        run: docker build -f Dockerfile.ui -t pfa-fraud-ui:${{ github.ref_name }} .
