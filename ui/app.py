@@ -513,8 +513,5 @@ def mark_alerts_read(n_clicks, session):
 # ─────────────────────────────────────────────────────────────
 # LANCEMENT
 # ─────────────────────────────────────────────────────────────
-# Exposé pour gunicorn (Render)
-server = app.server
-
 if __name__ == "__main__":
     app.run(debug=True, port=8050, host="0.0.0.0")
