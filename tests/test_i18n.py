@@ -2,8 +2,7 @@
 Tests du module i18n (internationalisation FR/EN).
 """
 
-import pytest
-from unittest.mock import patch
+
 
 
 class TestI18n:

@@ -1,11 +1,12 @@
 """Page de gestion des utilisateurs (admin seulement)."""
 
-import dash
-from dash import dcc, html, Input, Output, State
 from datetime import datetime
 
-from ui.components.sidebar import wrap_with_sidebar
+import dash
+from dash import Input, Output, State, dcc, html
+
 from ui.auth import database
+from ui.components.sidebar import wrap_with_sidebar
 
 
 def layout(session):
@@ -147,7 +148,7 @@ def _format_date(value):
             "Juil.", "Août", "Sept.", "Oct.", "Nov.", "Déc.",
         ]
         return f"{date.day} {months[date.month - 1]} {date.year}, {date:%H:%M}"
-    except (TypeError, ValueError): # noqa: BLE001
+    except (TypeError, ValueError):
         return _display(value)
 
 

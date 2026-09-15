@@ -3,11 +3,11 @@ Base de données SQLite — Utilisateurs + Alertes de fraude.
 Fichier : ui/auth/users.db (créé automatiquement)
 """
 
-import sqlite3
 import json
+import sqlite3
 from pathlib import Path
-from datetime import datetime
-from werkzeug.security import generate_password_hash, check_password_hash
+
+from werkzeug.security import check_password_hash, generate_password_hash
 
 DB_PATH = Path(__file__).parent / "users.db"
 
@@ -185,7 +185,7 @@ def create_user(nom, prenom, email, telephone, adresse, password, role="analyst"
         user_id = cursor.lastrowid
         conn.close()
         return True, user_id
-    except sqlite3.IntegrityError: # noqa: BLE001
+    except sqlite3.IntegrityError:
         return False, "Cet email est déjà utilisé."
     except Exception as e: # noqa: BLE001
         return False, f"Erreur : {e}"
@@ -294,7 +294,7 @@ def update_user_profile(user_id, nom, prenom, email, telephone, adresse,
         conn.commit()
         conn.close()
         return True, "Profil mis à jour."
-    except sqlite3.IntegrityError: # noqa: BLE001
+    except sqlite3.IntegrityError:
         return False, "Cet email est déjà utilisé."
     except Exception as e:  # noqa: BLE001
         return False, f"Erreur : {e}"
@@ -389,7 +389,7 @@ def get_batch_imports(user_id, limit=5):
     for import_id, filename, raw_results, created_at in rows:
         try:
             results = json.loads(raw_results)
-        except (TypeError, json.JSONDecodeError): # noqa: BLE001
+        except (TypeError, json.JSONDecodeError):
             results = []
         imports.append({
             "id": import_id,

@@ -1,5 +1,6 @@
 """Diagnostic connexion Databricks + MLflow."""
 import traceback
+
 from api.services import databricks_client as dbx
 
 print("=" * 60)

@@ -3,11 +3,12 @@ Tests de la base de données SQLite — Users + Alerts + Audit logs.
 Utilise une base temporaire pour éviter de polluer la vraie.
 """
 
-import pytest
 import os
 import tempfile
 from pathlib import Path
 from unittest.mock import patch
+
+import pytest
 
 
 @pytest.fixture(scope="function")
@@ -112,7 +113,7 @@ class TestAuthenticate:
     def test_authenticate_case_insensitive(self, temp_db):
         """L'email est insensible à la casse."""
         temp_db.create_user("A", "B", "test@test.com", "", "", "pass123")
-        success, user = temp_db.authenticate("TEST@TEST.COM", "pass123")
+        success, _user = temp_db.authenticate("TEST@TEST.COM", "pass123")
         assert success is True
 
 

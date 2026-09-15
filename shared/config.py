@@ -4,6 +4,7 @@ Configuration centrale — chargée depuis .env.
 """
 
 import os
+
 from dotenv import load_dotenv
 
 load_dotenv()

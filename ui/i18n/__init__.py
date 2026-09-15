@@ -1,6 +1,7 @@
 import json
 import os
 
+
 def load_translations(lang="fr"):
     """Charge les traductions pour la langue donnée."""
     path = os.path.join(os.path.dirname(__file__), f"{lang}.json")

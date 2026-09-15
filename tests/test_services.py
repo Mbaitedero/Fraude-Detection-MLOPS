@@ -2,11 +2,10 @@
 Tests des services : databricks_client + model_service.
 """
 
-import pytest
-import numpy as np
-from unittest.mock import patch, MagicMock
-import pandas as pd
+from unittest.mock import MagicMock, patch
 
+import numpy as np
+import pytest
 
 # ─────────────────────────────────────────────────────────────
 # TESTS : databricks_client
@@ -68,7 +67,7 @@ class TestDatabricksClient:
         from api.services import databricks_client as dbx
         dbx._cache["model"] = None
         
-        with patch("api.services.databricks_client.load_champion_model") as mock_load:
+        with patch("api.services.databricks_client.load_champion_model"):
             dbx.promote_version("3")
             mock_client.set_registered_model_alias.assert_called_once_with(
                 "pfa_data.ml_outputs.fraud_detection_model", "champion", "3",

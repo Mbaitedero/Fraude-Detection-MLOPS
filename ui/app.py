@@ -2,23 +2,32 @@
 Dash UI — Routeur principal avec authentification, i18n, theme.
 """
 
-import dash
 import os
 import smtplib
 from email.message import EmailMessage
-from dash import dcc, html, Input, Output, State
+
+import dash
+from dash import Input, Output, State, dcc, html
 from dash.exceptions import PreventUpdate
 from dotenv import load_dotenv
 
 from ui.auth import database
 from ui.auth.session import is_logged_in
-from ui.components.header import render_header
-from ui.components.alerts import render_alert_banner
-from ui.i18n import t, load_translations
 from ui.pages import (
-    landing, signup, login, home, scoring, batch,
-    batch_upload, monitoring, admin, powerbi, users, profile, alerts,
+    admin,
+    alerts,
+    batch,
+    batch_upload,
     contact_messages,
+    home,
+    landing,
+    login,
+    monitoring,
+    powerbi,
+    profile,
+    scoring,
+    signup,
+    users,
 )
 
 load_dotenv()

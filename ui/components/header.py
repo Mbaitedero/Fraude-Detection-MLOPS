@@ -3,8 +3,7 @@ Header universel avec logo, navigation, toggle thème, toggle langue.
 Utilisé sur toutes les pages (landing + dashboard).
 """
 
-from dash import html, dcc
-import dash
+from dash import html
 
 
 def render_header(session=None, active_page=None, lang="fr"):

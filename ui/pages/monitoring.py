@@ -2,14 +2,14 @@
 Page Monitoring avec visuels Plotly (sans Grafana).
 """
 
-import dash   
-                              
-from dash import html, dcc,Input, Output, State
+import os
+
+import dash
+import pandas as pd
 import plotly.express as px
 import plotly.graph_objects as go
 import requests
-import pandas as pd
-import os
+from dash import Input, Output, dcc, html
 from sklearn.metrics import (
     average_precision_score,
     confusion_matrix,
@@ -22,7 +22,7 @@ from ui.components.sidebar import wrap_with_sidebar
 
 
 def layout(session):
-    api_url = os.environ.get("API_URL", "http://api:8000")
+    os.environ.get("API_URL", "http://api:8000")
     
     content = [
         # KPIs santé
@@ -145,7 +145,7 @@ def load_monitoring(_):
     )
     fig_dist.update_layout(
         height=380,
-        margin=dict(t=60, b=45, l=45, r=25),
+        margin={"t": 60, "b": 45, "l": 45, "r": 25},
         legend_title_text="Classe",
         bargap=0.04,
         template="plotly_white",
@@ -202,10 +202,10 @@ def load_monitoring(_):
     fig_cm.update_layout(
         title=cm_title,
         height=350,
-        margin=dict(t=60, b=40, l=80, r=20),
+        margin={"t": 60, "b": 40, "l": 80, "r": 20},
         template="plotly_white",
         annotations=matrix_annotations,
-        yaxis=dict(categoryorder="array", categoryarray=row_labels),
+        yaxis={"categoryorder": "array", "categoryarray": row_labels},
     )
     
     if "actual_label" in df.columns or "fraud_flag_reel" in df.columns:
@@ -217,18 +217,18 @@ def load_monitoring(_):
         fig_roc = go.Figure([
             go.Scatter(
                 x=[0, 1], y=[0, 1], mode="lines",
-                line=dict(dash="dash", color="#94a3b8"), name="Aléatoire",
+                line={"dash": "dash", "color": "#94a3b8"}, name="Aléatoire",
             ),
             go.Scatter(
                 x=fpr, y=tpr, mode="lines", fill="tozeroy",
-                line=dict(color="#2563eb", width=3),
+                line={"color": "#2563eb", "width": 3},
                 name=f"ROC (AUC = {roc_auc:.4f})",
             ),
         ])
         fig_pr = go.Figure([
             go.Scatter(
                 x=recall, y=precision, mode="lines", fill="tozeroy",
-                line=dict(color="#10b981", width=3),
+                line={"color": "#10b981", "width": 3},
                 name=f"PR (AP = {average_precision:.4f})",
             ),
         ])
@@ -239,14 +239,14 @@ def load_monitoring(_):
     fig_roc.update_layout(
         title="Courbe ROC réelle", height=380,
         xaxis_title="Taux de faux positifs", yaxis_title="Taux de vrais positifs",
-        margin=dict(t=60, b=45, l=50, r=25), template="plotly_white",
-        xaxis=dict(range=[0, 1]), yaxis=dict(range=[0, 1]),
+        margin={"t": 60, "b": 45, "l": 50, "r": 25}, template="plotly_white",
+        xaxis={"range": [0, 1]}, yaxis={"range": [0, 1]},
     )
     fig_pr.update_layout(
         title="Courbe Précision-Rappel réelle", height=380,
         xaxis_title="Rappel", yaxis_title="Précision",
-        margin=dict(t=60, b=45, l=50, r=25), template="plotly_white",
-        xaxis=dict(range=[0, 1]), yaxis=dict(range=[0, 1]),
+        margin={"t": 60, "b": 45, "l": 50, "r": 25}, template="plotly_white",
+        xaxis={"range": [0, 1]}, yaxis={"range": [0, 1]},
     )
     
     # Top features (statiques)
@@ -264,7 +264,7 @@ def load_monitoring(_):
     fig_feat.update_layout(
         height=420,
         showlegend=False,
-        margin=dict(t=55, b=45, l=170, r=25),
+        margin={"t": 55, "b": 45, "l": 170, "r": 25},
         template="plotly_white",
         xaxis_title="Importance",
         yaxis_title="",

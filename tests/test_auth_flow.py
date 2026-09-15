@@ -2,11 +2,12 @@
 Tests du flux complet d'authentification (signup → login → logout).
 """
 
-import pytest
-import tempfile
 import os
+import tempfile
 from pathlib import Path
 from unittest.mock import patch
+
+import pytest
 
 
 @pytest.fixture(scope="function")
@@ -96,7 +97,7 @@ class TestAuthFlow:
     def test_admin_can_manage_users(self, temp_db):
         """Un admin peut gérer les utilisateurs."""
         # Créer un admin
-        success_a, admin_id = temp_db.create_user(
+        success_a, _admin_id = temp_db.create_user(
             "Admin", "Root", "admin@test.com", "", "", "admin123", role="admin"
         )
         assert success_a

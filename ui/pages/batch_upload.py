@@ -2,16 +2,17 @@
 Page d'upload CSV et prédiction batch.
 """
 
-from dash import html, dcc, Input, Output, State, dash_table
-import dash
-import pandas as pd
-import requests
 import base64
 import io
 import os
 
-from ui.components.sidebar import wrap_with_sidebar
+import dash
+import pandas as pd
+import requests
+from dash import Input, Output, State, dash_table, dcc, html
+
 from ui.auth import database
+from ui.components.sidebar import wrap_with_sidebar
 
 
 def _parse_hour(value):
@@ -135,7 +136,7 @@ def handle_upload(n_clicks, contents, filename, session):
     
     # Décoder le fichier
     try:
-        content_type, content_string = contents.split(",")
+        _content_type, content_string = contents.split(",")
         decoded = base64.b64decode(content_string)
         df = pd.read_csv(io.StringIO(decoded.decode("utf-8")))
     except Exception as e:

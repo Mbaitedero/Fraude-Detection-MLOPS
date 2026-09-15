@@ -1,9 +1,9 @@
 """Page Transactions notées de l'utilisateur connecté."""
 
-from dash import html, dash_table
+from dash import dash_table, html
 
-from ui.components.sidebar import wrap_with_sidebar
 from ui.auth import database
+from ui.components.sidebar import wrap_with_sidebar
 
 
 def layout(session):

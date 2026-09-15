@@ -2,11 +2,11 @@
 Page Dashboards BI — Galerie des captures Power BI.
 """
 
-from dash import html, dcc
 import os
 
-from ui.components.sidebar import wrap_with_sidebar
+from dash import dcc, html
 
+from ui.components.sidebar import wrap_with_sidebar
 
 # ─────────────────────────────────────────────────────────────
 # CONFIGURATION — Ajoute autant de dashboards que tu veux

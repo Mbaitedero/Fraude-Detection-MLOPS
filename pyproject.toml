@@ -1,0 +1,14 @@
+[tool.ruff]
+line-length = 100
+target-version = "py311"
+exclude = ["venv", ".venv", "__pycache__"]
+
+[tool.ruff.lint]
+select = ["E", "W", "F", "I", "B", "C4", "UP", "SIM", "PL", "RUF"]
+ignore = [
+    "BLE001",  # Exception large : acceptable dans ce projet
+    "S110",    # try-except-pass : acceptable dans les tests
+    "S112",    # try-except-continue : acceptable
+    "SIM115",  # NamedTemporaryFile : pattern valide dans les fixtures
+    "PLW1508", # env var default type : cosmetique
+]

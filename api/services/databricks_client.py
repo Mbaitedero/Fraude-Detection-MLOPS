@@ -3,12 +3,13 @@ Connexions Databricks + cache des appels coûteux.
 """
 
 import os
+from functools import wraps
+
 import joblib
 import mlflow
 import pandas as pd
 from cachetools import TTLCache
 from databricks import sql as databricks_sql
-from functools import wraps
 from mlflow.tracking import MlflowClient
 
 from shared.config import Config
@@ -74,10 +75,9 @@ def get_sql_connection():
 
 
 def run_query(query: str) -> pd.DataFrame:
-    with get_sql_connection() as conn:
-        with conn.cursor() as cursor:
-            cursor.execute(query)
-            return cursor.fetchall_arrow().to_pandas()
+    with get_sql_connection() as conn, conn.cursor() as cursor:
+        cursor.execute(query)
+        return cursor.fetchall_arrow().to_pandas()
 
 
 # ─────────────────────────────────────────────────────────────

@@ -1,9 +1,10 @@
 """Page Admin MLOps — avec sidebar."""
 
-import dash
-from dash import dcc, html, Input, Output, State
-import requests
 import os
+
+import dash
+import requests
+from dash import Input, Output, html
 
 from ui.components.sidebar import wrap_with_sidebar
 

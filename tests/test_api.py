@@ -2,9 +2,10 @@
 Tests de l'API FastAPI.
 """
 
-import pytest
+from unittest.mock import MagicMock, patch
+
 import numpy as np
-from unittest.mock import patch, MagicMock
+import pytest
 from fastapi.testclient import TestClient
 
 from api.main import app

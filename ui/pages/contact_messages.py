@@ -88,7 +88,7 @@ def _format_date(value):
     try:
         date = datetime.fromisoformat(str(value))
         return f"{date:%d/%m/%Y %H:%M}"
-    except (TypeError, ValueError): # noqa: BLE001
+    except (TypeError, ValueError):
         return str(value or "-")
 
 

@@ -1,6 +1,6 @@
 """Page de connexion."""
 
-from dash import html, dcc
+from dash import dcc, html
 
 
 def layout():

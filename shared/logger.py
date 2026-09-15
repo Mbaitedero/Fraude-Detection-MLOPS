@@ -3,6 +3,7 @@ Logger structuré JSON pour toute l'application.
 """
 
 import logging
+
 import structlog
 
 

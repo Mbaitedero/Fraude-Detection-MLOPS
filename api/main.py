@@ -18,13 +18,15 @@ from slowapi.errors import RateLimitExceeded
 from slowapi.util import get_remote_address
 
 from api.schemas import (
-    TransactionInput, PredictionOutput, ModelInfo, HealthOutput,
+    HealthOutput,
+    ModelInfo,
+    PredictionOutput,
+    TransactionInput,
 )
 from api.services import databricks_client as dbx
 from api.services.model_service import predict_transaction
 from shared.config import Config
 from shared.logger import logger
-
 
 # ═════════════════════════════════════════════════════════════
 # LIFESPAN — Préchargement au démarrage
@@ -35,7 +37,7 @@ async def lifespan(app: FastAPI):
     """Charge le modèle + l'encoder au démarrage."""
     logger.info("api_startup", message="Démarrage de l'API")
     try:
-        model, features = dbx.load_champion_model()
+        _model, features = dbx.load_champion_model()
         logger.info("model_loaded", n_features=len(features))
 
         encoder = dbx.load_encoder()

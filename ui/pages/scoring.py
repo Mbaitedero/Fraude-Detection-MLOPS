@@ -1,18 +1,19 @@
 """Page Scoring manuel — avec sidebar."""
 
-import dash
-from dash import dcc, html, Input, Output, State
-import requests
 import os
 
-from ui.components.sidebar import wrap_with_sidebar
+import dash
+import requests
+from dash import Input, Output, State, dcc, html
+
 from ui.auth import database
+from ui.components.sidebar import wrap_with_sidebar
 from ui.i18n import t
 
 
 def layout(session):
     lang = session.get("langue") or session.get("lang", "fr")
-    api_url = os.environ.get("API_URL", "http://api:8000")
+    os.environ.get("API_URL", "http://api:8000")
     
     content = [
         html.Div([

@@ -1,7 +1,6 @@
 """Page d'inscription."""
 
-from dash import html, dcc
-import dash
+from dash import dcc, html
 
 
 def layout():

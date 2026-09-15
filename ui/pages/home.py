@@ -1,8 +1,9 @@
 """Dashboard principal après connexion."""
 
-from dash import html
-import requests
 import os
+
+import requests
+from dash import html
 
 from ui.components.sidebar import render_header_controls, render_sidebar
 from ui.i18n import t

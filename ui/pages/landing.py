@@ -1,6 +1,7 @@
 """Page d'accueil publique."""
 
-from dash import html, dcc
+from dash import dcc, html
+
 from ui.components.header import render_header
 
 

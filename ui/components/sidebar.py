@@ -2,10 +2,10 @@
 Sidebar réutilisable pour toutes les pages du dashboard.
 """
 
-from dash import html, dcc
-from ui.i18n import t
-from ui.auth import database
+from dash import dcc, html
 
+from ui.auth import database
+from ui.i18n import t
 
 # ═════════════════════════════════════════════════════════════
 # Configuration de la navigation
