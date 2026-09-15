@@ -13,14 +13,14 @@ def predict_transaction(payload: dict) -> dict:
     """
     model, feature_names = dbx.load_champion_model()
     encoder = dbx.load_encoder()
-    
+
     # --- Feature engineering ---
     montant = payload["montant"]
     type_transaction = payload["type_transaction"]
     heure = payload.get("heure", 14)
     is_weekend = int(payload.get("is_weekend", 0))
     est_international = int(payload.get("est_international", 0))
-    
+
     is_night = 1 if (heure < 6 or heure >= 22) else 0
     tranche_horaire = (
         "Nuit" if heure < 6 else "Matin" if heure < 12
@@ -29,7 +29,7 @@ def predict_transaction(payload: dict) -> dict:
     sens_operation = (
         "Débit" if type_transaction in ["Paiement", "Retrait", "Prélèvement"] else "Crédit"
     )
-    
+
     input_row = pd.DataFrame([{
         "montant": montant,
         "frais_transaction": round(montant * 0.005, 2) if type_transaction == "Paiement" else 0.0,
@@ -48,13 +48,13 @@ def predict_transaction(payload: dict) -> dict:
         "is_weekend": is_weekend,
         "est_international": est_international,
     }])
-    
+
     cat_cols = list(encoder.feature_names_in_)
     input_row[cat_cols] = encoder.transform(input_row[cat_cols])
     input_row = input_row[feature_names]
-    
+
     proba = float(model.predict_proba(input_row)[0, 1])
-    
+
     if proba >= 0.8:
         niveau, decision = "Très élevé", "FRAUDE"
     elif proba >= 0.5:
@@ -63,7 +63,7 @@ def predict_transaction(payload: dict) -> dict:
         niveau, decision = "Moyen", "NORMAL"
     else:
         niveau, decision = "Faible", "NORMAL"
-    
+
     return {
         "score": proba,
         "pourcentage": round(proba * 100, 2),

@@ -21,7 +21,7 @@ def layout(session):
             ),
         ], className="content-card"),
     ]
-    
+
     return wrap_with_sidebar(
         session, "batch", content,
         title="Transactions notées",

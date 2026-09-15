@@ -23,46 +23,46 @@ from ui.components.sidebar import wrap_with_sidebar
 
 def layout(session):
     os.environ.get("API_URL", "http://api:8000")
-    
+
     content = [
         # KPIs santé
         html.Div([
             html.H3("Santé du système", className="card-title"),
             html.Div(id="health-kpis", className="kpi-grid"),
         ], className="content-card"),
-        
+
         # Graphiques
         html.Div([
             html.Div([
                 html.H3("Distribution des scores de fraude", className="card-title"),
                 dcc.Graph(id="chart-scores-distribution"),
             ], className="content-card"),
-            
+
             html.Div([
                 html.H3("Matrice de confusion", className="card-title"),
                 dcc.Graph(id="chart-confusion"),
             ], className="content-card"),
         ], className="info-grid"),
-        
+
         html.Div([
             html.Div([
                 html.H3("Courbe ROC", className="card-title"),
                 dcc.Graph(id="chart-roc"),
             ], className="content-card"),
-            
+
             html.Div([
                 html.H3("Courbe Précision-Rappel", className="card-title"),
                 dcc.Graph(id="chart-pr"),
             ], className="content-card"),
         ], className="info-grid"),
-        
+
         # Top features
         html.Div([
             html.H3("Importance des features", className="card-title"),
             dcc.Graph(id="chart-features"),
         ], className="content-card"),
     ]
-    
+
     return wrap_with_sidebar(
         session, "monitoring", content,
         title="Monitoring du modèle",
@@ -81,34 +81,34 @@ def layout(session):
 )
 def load_monitoring(_):
     api_url = os.environ.get("API_URL", "http://api:8000")
-    
+
     # 1. KPIs de santé
     try:
         r = requests.get(f"{api_url}/health", timeout=5)
         health = r.json() if r.status_code == 200 else {}
-    except Exception: # noqa: BLE001
+    except Exception:
         health = {}
-    
+
     kpis = [
         _kpi("Statut API", "OK" if health.get("status") == "ok" else "Dégradé", ""),
         _kpi("Modèle chargé", "Oui" if health.get("model_loaded") else "Non", ""),
         _kpi("Encoder", "Oui" if health.get("checks", {}).get("encoder") else "Non", ""),
         _kpi("Databricks", "Connecté" if health.get("checks", {}).get("databricks") else "Indisponible", ""),
     ]
-    
+
     # 2. Charger les prédictions
     try:
         r = requests.get(f"{api_url}/batch?seuil=0.0&limit=40000", timeout=30)
         data = r.json() if r.status_code == 200 else []
-    except Exception: # noqa: BLE001
+    except Exception:
         data = []
-    
+
     if not data:
         empty = go.Figure().update_layout(title="Aucune donnée")
         return kpis, empty, empty, empty, empty, empty
-    
+
     df = pd.DataFrame(data)
-    
+
     # Distribution des scores
     dist_data = df.copy()
     if "actual_label" in dist_data.columns or "fraud_flag_reel" in dist_data.columns:
@@ -150,7 +150,7 @@ def load_monitoring(_):
         bargap=0.04,
         template="plotly_white",
     )
-    
+
     # Matrice de confusion réelle : vérité terrain contre seuil optimal du modèle.
     if "actual_label" in df.columns or "fraud_flag_reel" in df.columns:
         actual_column = "actual_label" if "actual_label" in df.columns else "fraud_flag_reel"
@@ -207,7 +207,7 @@ def load_monitoring(_):
         annotations=matrix_annotations,
         yaxis={"categoryorder": "array", "categoryarray": row_labels},
     )
-    
+
     if "actual_label" in df.columns or "fraud_flag_reel" in df.columns:
         fpr, tpr, _ = roc_curve(y_true, scores)
         roc_auc = roc_auc_score(y_true, scores)
@@ -248,14 +248,14 @@ def load_monitoring(_):
         margin={"t": 60, "b": 45, "l": 50, "r": 25}, template="plotly_white",
         xaxis={"range": [0, 1]}, yaxis={"range": [0, 1]},
     )
-    
+
     # Top features (statiques)
     features = pd.DataFrame({
         "feature": ["est_international", "montant", "is_night", "is_weekend",
                     "ecart_relatif_montant", "montant_cumule_client", "frais_transaction"],
         "importance": [0.470, 0.367, 0.354, 0.251, 0.141, 0.074, 0.062],
     }).sort_values("importance")
-    
+
     fig_feat = px.bar(
         features, x="importance", y="feature", orientation="h",
         title="Top 7 features",
@@ -269,7 +269,7 @@ def load_monitoring(_):
         xaxis_title="Importance",
         yaxis_title="",
     )
-    
+
     return kpis, fig_dist, fig_cm, fig_roc, fig_pr, fig_feat
 
 

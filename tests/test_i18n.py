@@ -50,8 +50,8 @@ class TestI18n:
         try:
             result = t("home", "es")
             # Si pas d'erreur, la clé est retournée
-            assert result == "home" or result == "Accueil"
-        except (FileNotFoundError, Exception):  # noqa: BLE001
+            assert result in {"home", "Accueil"}
+        except (FileNotFoundError, Exception):
             # OK si lève une exception
             pass
 

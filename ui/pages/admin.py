@@ -33,7 +33,7 @@ def layout(session):
         ], className="content-card"),
         html.Div(id="promote-feedback"),
     ]
-    
+
     return wrap_with_sidebar(
         session, "admin", content,
         title="Administration MLOps",
@@ -52,10 +52,10 @@ def load_admin(_):
     try:
         r_info = requests.get(f"{api_url}/model/info", timeout=10)
         r_versions = requests.get(f"{api_url}/versions", timeout=15)
-        
+
         champion = r_info.json() if r_info.status_code == 200 else None
         versions = r_versions.json() if r_versions.status_code == 200 else []
-        
+
         # ─── Champion ───
         if champion:
             champion_div = html.Div([
@@ -72,7 +72,7 @@ def load_admin(_):
         else:
             champion_div = html.Div("Aucun champion disponible.",
                                     className="alert-warning")
-        
+
         # ─── Versions ───
         if versions:
             rows = []
@@ -96,7 +96,7 @@ def load_admin(_):
                             disabled=is_champion)
                     ),
                 ]))
-            
+
             versions_div = html.Table([
                 html.Thead(html.Tr([
                     html.Th("Version"), html.Th("Alias"), html.Th("Run"),
@@ -108,9 +108,9 @@ def load_admin(_):
         else:
             versions_div = html.Div("Aucune version enregistrée.",
                                     className="alert-info")
-        
+
         return champion_div, versions_div
-    except Exception as e:  # noqa: BLE001
+    except Exception as e:
         return html.Div(f"Erreur : {e}", className="alert-error"), html.Div()
 
 
@@ -129,15 +129,15 @@ def _kpi(label, value, color):
 def handle_promote(n_clicks_list):
     if not any(n_clicks_list):
         raise dash.exceptions.PreventUpdate
-    
+
     ctx = dash.callback_context
     if not ctx.triggered:
         raise dash.exceptions.PreventUpdate
-    
+
     button_id = ctx.triggered[0]["prop_id"].split(".")[0]
     import json
     version = json.loads(button_id)["index"]
-    
+
     api_url = os.environ.get("API_URL", "http://api:8000")
     try:
         r = requests.post(f"{api_url}/promote/{version}", timeout=15)
@@ -145,5 +145,5 @@ def handle_promote(n_clicks_list):
             return html.Div(f"Version {version} promue en champion ! Rechargez pour voir.",
                             className="alert-success")
         return html.Div(f"Erreur : {r.text[:200]}", className="alert-error")
-    except Exception as e:  # noqa: BLE001
+    except Exception as e:
         return html.Div(f"Erreur : {e}", className="alert-error")

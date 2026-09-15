@@ -45,7 +45,7 @@ async def lifespan(app: FastAPI):
                     n_categories=len(encoder.feature_names_in_))
 
         logger.info("api_ready", message="✨ API prête à recevoir des requêtes")
-    except Exception as e:   # noqa: BLE001
+    except Exception as e:
         logger.error("startup_error", error=str(e), exc_info=True)
 
     yield
@@ -105,20 +105,20 @@ def health():
         model, features = dbx.load_champion_model()
         checks["model"] = model is not None
         details["n_features"] = len(features)
-    except Exception as e:  # noqa: BLE001
+    except Exception as e:
         details["model_error"] = str(e)[:100]
 
     try:
         encoder = dbx.load_encoder()
         checks["encoder"] = encoder is not None
         details["n_categories"] = len(encoder.feature_names_in_)
-    except Exception as e:  # noqa: BLE001
+    except Exception as e:
         details["encoder_error"] = str(e)[:100]
 
     try:
         dbx.run_query("SELECT 1 AS ping")
         checks["databricks"] = True
-    except Exception as e: # noqa: BLE001
+    except Exception as e:
         details["databricks_error"] = str(e)[:100]
 
     all_ok = all(checks.values())
@@ -148,10 +148,9 @@ def model_info():
             lift=run.data.metrics.get("lift"),
             run_id=version.run_id,
         )
-    except Exception as e:      # noqa: BLE001
+    except Exception as e:
         logger.error("model_info_error", error=str(e))
-        raise HTTPException(status_code=503, detail=f"Modèle indisponible : {e}")
-
+        raise HTTPException(status_code=503, detail=f"Modèle indisponible : {e}") from e
 
 @app.post("/predict", response_model=PredictionOutput, tags=["scoring"])
 @limiter.limit("100/minute")
@@ -166,10 +165,9 @@ def predict(request: Request, transaction: TransactionInput):
                     score=result["score"],
                     decision=result["decision"])
         return PredictionOutput(**result)
-    except Exception as e:  # noqa: BLE001
+    except Exception as e:
         logger.error("predict_error", error=str(e), exc_info=True)
-        raise HTTPException(status_code=500, detail=f"{type(e).__name__}: {e}")
-
+        raise HTTPException(status_code=500, detail=f"{type(e).__name__}: {e}") from e
 
 @app.get("/batch", tags=["scoring"])
 def batch(
@@ -199,9 +197,9 @@ def batch(
         if actual_column and actual_column != "actual_label":
             df["actual_label"] = df[actual_column]
         return df.to_dict(orient="records")
-    except Exception as e:    # noqa: BLE001
+    except Exception as e:
         logger.error("batch_error", error=str(e))
-        raise HTTPException(status_code=500, detail=f"Erreur SQL : {e}")
+        raise HTTPException(status_code=500, detail=f"Erreur SQL : {e}") from e
 
 
 @app.get("/versions", tags=["admin"])
@@ -210,9 +208,9 @@ def versions():
     try:
         df = dbx.get_all_versions_df()
         return df.to_dict(orient="records")
-    except Exception as e: # noqa: BLE001
+    except Exception as e:
         logger.error("versions_error", error=str(e))
-        raise HTTPException(status_code=500, detail=f"Erreur : {e}")
+        raise HTTPException(status_code=500, detail=f"Erreur : {e}") from e
 
 
 @app.post("/promote/{version}", tags=["admin"])
@@ -226,6 +224,6 @@ def promote(version: str):
             "version": version,
             "alias": Config.MODEL_ALIAS,
         }
-    except Exception as e: # noqa: BLE001
+    except Exception as e:
         logger.error("promote_error", version=version, error=str(e))
-        raise HTTPException(status_code=500, detail=f"Erreur promotion : {e}")
+        raise HTTPException(status_code=500, detail=f"Erreur promotion : {e}") from e

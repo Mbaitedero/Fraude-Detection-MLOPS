@@ -84,7 +84,7 @@ ADMIN_ROUTES = {"/admin", "/users", "/contact-messages"}
 )
 def router(pathname, session, ui_data):
     logged_in = is_logged_in(session)
-    
+
     # Fusionner la session et les préférences locales avec les mêmes clés
     # que celles attendues par les pages et la sidebar.
     merged = {**(session or {}), **(ui_data or {})}
@@ -234,7 +234,7 @@ def handle_contact_message(n_clicks, nom, prenom, email, telephone, message):
             server.starttls()
             server.login(smtp_user, smtp_password)
             server.send_message(email_message)
-    except Exception:    # noqa: BLE001
+    except Exception:
         return html.Div(
             f"Message enregistré (référence #{message_id}), mais la notification "
             "email n'a pas pu être envoyée.",

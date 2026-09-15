@@ -52,12 +52,13 @@ DASHBOARDS = [
 
 def layout(session):
     """Page Dashboards BI."""
+    # ✅ APRÈS
     powerbi_url = os.environ.get("POWERBI_URL", "").strip()
-
-    if powerbi_url and "?r=" in powerbi_url:
-        content = [_render_iframe(powerbi_url)]
-    else:
-        content = [_render_gallery()]
+    content = (
+        [_render_iframe(powerbi_url)]
+        if powerbi_url and "?r=" in powerbi_url
+        else [_render_gallery()]
+    )
 
     return wrap_with_sidebar(
         session, "powerbi", content,

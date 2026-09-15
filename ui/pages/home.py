@@ -12,26 +12,26 @@ from ui.i18n import t
 def layout(session):
     lang = session.get("langue") or session.get("lang", "fr")
     user_name = f"{session.get('prenom', '')} {session.get('nom', '')}".strip()
-    
+
     # ── Récupération des KPIs avec capture d'erreur détaillée ──
     api_url = os.environ.get("API_URL", "http://localhost:8000")
     kpis = None
     error_msg = None
-    
+
     try:
         r = requests.get(f"{api_url}/model/info", timeout=60)
         if r.status_code == 200:
             kpis = r.json()
         else:
             error_msg = f"HTTP {r.status_code} — {r.text[:200]}"
-    except Exception as e: # noqa: BLE001
+    except Exception as e:
         error_msg = f"{type(e).__name__} : {e}"
-    
+
     # ── Debug : log dans la console ──
     print(f"[DEBUG] api_url = {api_url}")
     print(f"[DEBUG] kpis = {kpis is not None}")
     print(f"[DEBUG] error = {error_msg}")
-    
+
     # ── Bannière de statut ──
     if kpis:
         banner = html.Div([
@@ -54,7 +54,7 @@ def layout(session):
                                 "color": "#991b1b", "marginTop": "6px"}),
             ]),
         ], className="status-banner status-warning")
-    
+
     # ── KPIs ──
     kpi_cards = [
         _kpi_card("PR-AUC", f"{kpis['pr_auc']:.4f}" if kpis and kpis.get('pr_auc') else "—",
@@ -66,10 +66,10 @@ def layout(session):
         _kpi_card("Version champion", f"v{kpis['version']}" if kpis else "—",
                   "", "info"),
     ]
-    
+
     return html.Div([
         render_sidebar(session, "home", lang),
-        
+
         # ─── CONTENU ───
         html.Div([
             html.Div([
@@ -79,9 +79,9 @@ def layout(session):
                 ], className="topbar-heading"),
                 render_header_controls(session.get("langue") or session.get("lang", "fr")),
             ], className="topbar"),
-            
+
             html.Div(kpi_cards, className="kpi-grid"),
-            
+
             html.Div([
                 html.Div([
                     html.H3(t("technical_stack", lang)),
@@ -93,7 +93,7 @@ def layout(session):
                     html.P("Bronze → Silver → Gold → Modèle ML → API FastAPI → UI Dash"),
                 ], className="info-card"),
             ], className="info-grid"),
-            
+
             banner,
         ], className="main-content"),
     ], className="dashboard-container")

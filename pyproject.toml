@@ -1,14 +1,51 @@
 [tool.ruff]
-line-length = 100
+line-length = 120
 target-version = "py311"
-exclude = ["venv", ".venv", "__pycache__"]
+exclude = ["venv", ".venv", "__pycache__", "build", "dist", ".git"]
 
 [tool.ruff.lint]
-select = ["E", "W", "F", "I", "B", "C4", "UP", "SIM", "PL", "RUF"]
-ignore = [
-    "BLE001",  # Exception large : acceptable dans ce projet
-    "S110",    # try-except-pass : acceptable dans les tests
-    "S112",    # try-except-continue : acceptable
-    "SIM115",  # NamedTemporaryFile : pattern valide dans les fixtures
-    "PLW1508", # env var default type : cosmetique
+select = [
+    "E",   # pycodestyle errors
+    "W",   # pycodestyle warnings
+    "F",   # pyflakes (vraies erreurs : variable non définie, import inutilisé, etc.)
+    "I",   # isort (tri des imports)
+    "B",   # flake8-bugbear (bugs potentiels)
+    "C4",  # flake8-comprehensions
+    "UP",  # pyupgrade
+    "SIM", # flake8-simplify
+    "RUF", # ruff spécifique
 ]
+ignore = [
+    # ─── Style / bruit sur les projets Dash & FastAPI ───
+    "E501",    # Line too long : Dash utilise beaucoup de HTML inline
+    "E702",    # Multiple statements on one line (semicolon) : rare, acceptable
+    "PLR2004", # Magic values : seuils, codes HTTP, etc. — pas critique
+    "PLC0415", # Imports dans les fonctions : nécessaires dans Dash (lazy)
+    "PLR0911", # Too many return statements : le router Dash en a besoin
+    "PLR0912", # Too many branches : idem
+    "PLR0913", # Too many arguments : callbacks Dash ont besoin de beaucoup d'args
+    "PLR0915", # Too many statements : fonctions UI complexes
+    "PLR0917", # Too many positional arguments : idem
+    "RUF001",  # Ambiguous characters (×, —) : le français en contient
+    "SIM117",  # Nested with : parfois plus lisible
+    # ─── Sécurité : règles trop strictes pour ce projet ───
+    "BLE001",  # Catch Exception : APIs externes, Databricks
+    "S110",    # try-except-pass : fixtures de test
+    "S112",    # try-except-continue : boucles tolérantes
+    "SIM115",  # NamedTemporaryFile : pattern standard pytest
+    "PLW1508", # env var default type
+]
+
+# Règles spécifiques aux tests (encore plus permissives)
+[tool.ruff.lint.per-file-ignores]
+"tests/*" = ["PLR2004", "PLC0415", "E501", "B904"]
+"test_*.py" = ["PLR2004", "PLC0415", "E501", "B904", "F841"]
+"ui/pages/*" = ["PLR0913", "PLR0917", "PLR0911", "PLR0912", "PLR0915", "PLC0415"]
+"ui/app.py" = ["PLR0913", "PLR0917", "PLR0911", "PLR0912", "PLR0915", "PLC0415"]
+"api/main.py" = ["B904", "PLR0911"]
+"api/services/model_service.py" = ["PLR2004"]
+"ui/auth/database.py" = ["PLR0913", "PLR0917", "PLR0911", "PLR2004"]
+
+[tool.ruff.format]
+quote-style = "double"
+indent-style = "space"

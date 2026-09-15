@@ -13,7 +13,7 @@ def render_header(session=None, active_page=None, lang="fr"):
         active_page: id de la page active ("home", "scoring", ...)
         lang: "fr" ou "en"
     """
-    
+
     # Textes selon la langue
     texts = {
         "fr": {
@@ -38,14 +38,14 @@ def render_header(session=None, active_page=None, lang="fr"):
         },
     }
     t = texts.get(lang, texts["fr"])
-    
+
     # Liens de navigation
     nav_links = [
         html.A(t["about"], href="#about", className="header-link"),
         html.A(t["services"], href="#services", className="header-link"),
         html.A(t["contact"], href="#contact", className="header-link"),
     ]
-    
+
     # Actions à droite
     right_actions = [
         # Toggle langue
@@ -65,7 +65,7 @@ def render_header(session=None, active_page=None, lang="fr"):
             title="Changer de thème / Change theme",
         ),
     ]
-    
+
     # Boutons login/signup OU dashboard/logout selon session
     if session and session.get("user_id"):
         right_actions.append(
@@ -86,7 +86,7 @@ def render_header(session=None, active_page=None, lang="fr"):
         right_actions.append(
             html.A(t["signup"], href="/signup", className="header-btn header-btn-primary")
         )
-    
+
     return html.Header([
         # ─── Logo (à gauche) ───
         html.A([
@@ -96,10 +96,10 @@ def render_header(session=None, active_page=None, lang="fr"):
                 html.Div("BANK", className="header-brand-sub"),
             ], className="header-brand-text"),
         ], href="/", className="header-logo-container"),
-        
+
         # ─── Navigation centrale ───
         html.Nav(nav_links, className="header-nav"),
-        
+
         # ─── Actions (à droite) ───
         html.Div(right_actions, className="header-actions"),
     ], className="header", id="app-header")

@@ -2,6 +2,7 @@
 Tests du flux complet d'authentification (signup → login → logout).
 """
 
+import contextlib
 import os
 import tempfile
 from pathlib import Path
@@ -19,10 +20,8 @@ def temp_db():
         from ui.auth import database
         database.init_db()
         yield database
-    try:
+    with contextlib.suppress(Exception):
         os.unlink(tmp.name)
-    except Exception:
-        pass
 
 
 class TestAuthFlow:

@@ -65,7 +65,7 @@ def layout(session):
                 "mode_paiement, heure, is_weekend, est_international.",
                 className="card-subtitle",
             ),
-            
+
             dcc.Upload(
                 id="upload-csv",
                 children=_upload_content(),
@@ -80,7 +80,7 @@ def layout(session):
                 className="btn-primary-lg",
                 style={"marginTop": "16px"},
             ),
-            
+
             dcc.Loading(
                 html.Div(id="upload-status"),
                 type="circle",
@@ -88,7 +88,7 @@ def layout(session):
                 fullscreen=False,
             ),
         ], className="content-card"),
-        
+
         dcc.Loading(
             html.Div(id="batch-results-container"),
             type="circle",
@@ -96,7 +96,7 @@ def layout(session):
             fullscreen=False,
         ),
     ]
-    
+
     return wrap_with_sidebar(
         session, "batch_upload", content,
         title="Prédiction batch (CSV)",
@@ -133,7 +133,7 @@ def handle_upload(n_clicks, contents, filename, session):
             ),
             html.Div(),
         )
-    
+
     # Décoder le fichier
     try:
         _content_type, content_string = contents.split(",")
@@ -141,7 +141,7 @@ def handle_upload(n_clicks, contents, filename, session):
         df = pd.read_csv(io.StringIO(decoded.decode("utf-8")))
     except Exception as e:
         return html.Div(f"Erreur de lecture : {e}", className="alert-error"), html.Div()
-    
+
     # Vérifier les colonnes requises
     required = ["montant", "type_transaction", "mode_paiement", "heure"]
     missing = [c for c in required if c not in df.columns]
@@ -150,11 +150,11 @@ def handle_upload(n_clicks, contents, filename, session):
             f"Colonnes manquantes : {', '.join(missing)}",
             className="alert-error",
         ), html.Div()
-    
+
     # Appeler l'API pour chaque ligne
     api_url = os.environ.get("API_URL", "http://api:8000")
     results = []
-    
+
     for _, row in df.iterrows():
         try:
             payload = {
@@ -174,7 +174,7 @@ def handle_upload(n_clicks, contents, filename, session):
                 "niveau_risque": str(error)[:80],
             })
             continue
-        
+
         try:
             r = requests.post(f"{api_url}/predict", json=payload, timeout=10)
             if r.status_code == 200:
@@ -207,11 +207,11 @@ def handle_upload(n_clicks, contents, filename, session):
                 "decision": "ERREUR",
                 "niveau_risque": str(e)[:50],
             })
-    
+
     df_results = pd.DataFrame(results)
     n_fraudes = (df_results["decision"] == "FRAUDE").sum()
     n_total = len(df_results)
-    
+
     import_id = None
     if session and session.get("user_id"):
         import_id = database.save_batch_import(session["user_id"], filename, results)
@@ -237,11 +237,11 @@ def handle_upload(n_clicks, contents, filename, session):
             ),
         ]),
     ], className="status-banner")
-    
+
     # Résultats
     results_content = html.Div([
         html.H3("Résultats de la prédiction", className="card-title"),
-        
+
         # KPIs
         html.Div([
             _kpi_card("Total", f"{n_total}", ""),
@@ -249,14 +249,14 @@ def handle_upload(n_clicks, contents, filename, session):
             _kpi_card("Taux", f"{n_fraudes/n_total:.1%}", ""),
             _kpi_card("Normales", f"{n_total - n_fraudes}", ""),
         ], className="kpi-grid"),
-        
+
         # Téléchargement
         html.Div([
             html.Button("Télécharger les résultats (CSV)",
                         id="btn-download-csv", className="btn-primary-lg"),
             dcc.Download(id="download-csv"),
         ], style={"marginTop": "20px"}),
-        
+
         # Table des résultats
         html.Div([
             dash_table.DataTable(
@@ -277,11 +277,11 @@ def handle_upload(n_clicks, contents, filename, session):
                 ],
             ),
         ]),
-        
+
         # Stockage des résultats pour téléchargement
         dcc.Store(id="store-results", data=df_results.to_dict("records")),
     ], className="content-card")
-    
+
     return status, results_content
 
 

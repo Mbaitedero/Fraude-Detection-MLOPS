@@ -1,4 +1,4 @@
- 
+
 """
 Configuration centrale — chargée depuis .env.
 """
