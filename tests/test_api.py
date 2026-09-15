@@ -53,9 +53,13 @@ def test_root(client):
     assert response.json()["docs"] == "/docs"
 
 
+@patch("api.services.databricks_client.run_query")
+@patch("api.services.databricks_client.load_encoder")
 @patch("api.services.databricks_client.load_champion_model")
-def test_health_ok(mock_load, client, mock_model):
-    mock_load.return_value = (mock_model, ["feature1", "feature2"])
+def test_health_ok(mock_load_model, mock_load_enc, mock_run_query, client, mock_model, mock_encoder):
+    mock_load_model.return_value = (mock_model, ["feature1", "feature2"])
+    mock_load_enc.return_value = mock_encoder
+    mock_run_query.return_value = MagicMock()
     response = client.get("/health")
     assert response.status_code == 200
     assert response.json()["status"] == "ok"
