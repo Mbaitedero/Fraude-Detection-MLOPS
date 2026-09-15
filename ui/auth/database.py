@@ -1,16 +1,37 @@
 """
 Base de données SQLite — Utilisateurs + Alertes de fraude.
-Fichier : ui/auth/users.db (créé automatiquement)
+Support local (SQLite) et cloud (Turso/libSQL).
 """
 
+import os
 import json
-import sqlite3
 from pathlib import Path
+from datetime import datetime
+from werkzeug.security import generate_password_hash, check_password_hash
+import sqlite3 
 
-from werkzeug.security import check_password_hash, generate_password_hash
+# ─── Configuration ───
+TURSO_URL = os.environ.get("TURSO_DATABASE_URL", "")
+TURSO_TOKEN = os.environ.get("TURSO_AUTH_TOKEN", "")
+LOCAL_DB = Path(__file__).parent / "users.db"
+DB_PATH = Path(os.environ.get("DB_PATH", LOCAL_DB))
 
-DB_PATH = Path(__file__).parent / "users.db"
 
+def _get_connection():
+    """
+    Retourne une connexion base de données.
+    - Si TURSO_URL/TURSO_TOKEN sont définis : connexion à Turso (cloud).
+    - Sinon : connexion SQLite locale.
+    """
+    if TURSO_URL and TURSO_TOKEN:
+        import libsql_experimental as libsql
+        return libsql.connect(
+            "local.db",
+            sync_url=TURSO_URL,
+            auth_token=TURSO_TOKEN,
+        )
+    import sqlite3
+    return sqlite3.connect(DB_PATH)
 
 # ═════════════════════════════════════════════════════════════
 # INITIALISATION
@@ -18,7 +39,7 @@ DB_PATH = Path(__file__).parent / "users.db"
 
 def init_db():
     """Crée les tables users + alerts + logs si elles n'existent pas."""
-    conn = sqlite3.connect(DB_PATH)
+    conn = _get_connection()
     cursor = conn.cursor()
 
     # ─── Table users ───
@@ -110,7 +131,7 @@ def init_db():
 
 def save_contact_message(nom, prenom, email, telephone, message):
     """Enregistre une demande de contact et retourne son identifiant."""
-    conn = sqlite3.connect(DB_PATH)
+    conn = _get_connection()
     cursor = conn.cursor()
     cursor.execute(
         """INSERT INTO contact_messages
@@ -126,7 +147,7 @@ def save_contact_message(nom, prenom, email, telephone, message):
 
 def get_contact_messages(statut=None, limit=100):
     """Retourne les demandes de contact pour l'administration."""
-    conn = sqlite3.connect(DB_PATH)
+    conn = _get_connection()
     query = """SELECT id, nom, prenom, email, telephone, message, statut, created_at
                FROM contact_messages"""
     params = []
@@ -151,7 +172,7 @@ def update_contact_message_status(message_id, statut):
     """Met à jour le statut d'une demande de contact."""
     if statut not in {"nouveau", "lu", "traite"}:
         raise ValueError("Statut de contact invalide.")
-    conn = sqlite3.connect(DB_PATH)
+    conn = _get_connection()
     conn.execute(
         "UPDATE contact_messages SET statut = ? WHERE id = ?",
         (statut, message_id),
@@ -175,7 +196,7 @@ def create_user(nom, prenom, email, telephone, adresse, password, role="analyst"
     password_hash = generate_password_hash(password)
 
     try:
-        conn = sqlite3.connect(DB_PATH)
+        conn = _get_connection()
         cursor = conn.cursor()
         cursor.execute("""
             INSERT INTO users (nom, prenom, email, telephone, adresse, password_hash, role)
@@ -194,7 +215,7 @@ def create_user(nom, prenom, email, telephone, adresse, password, role="analyst"
 def authenticate(email, password):
     """Authentifie un utilisateur. Retourne (success, user_dict_or_message)."""
     try:
-        conn = sqlite3.connect(DB_PATH)
+        conn = _get_connection()
         cursor = conn.cursor()
         cursor.execute(
             """SELECT id, nom, prenom, email, telephone, adresse, fonction,
@@ -237,7 +258,7 @@ def authenticate(email, password):
 
 def get_user(user_id):
     """Récupère un utilisateur par ID."""
-    conn = sqlite3.connect(DB_PATH)
+    conn = _get_connection()
     cursor = conn.cursor()
     cursor.execute(
         """SELECT id, nom, prenom, email, telephone, adresse, fonction,
@@ -289,7 +310,7 @@ def update_user_profile(user_id, nom, prenom, email, telephone, adresse,
     values.append(user_id)
 
     try:
-        conn = sqlite3.connect(DB_PATH)
+        conn = _get_connection()
         conn.execute(query, values)
         conn.commit()
         conn.close()
@@ -302,7 +323,7 @@ def update_user_profile(user_id, nom, prenom, email, telephone, adresse,
 
 def get_all_users():
     """Liste tous les utilisateurs (admin)."""
-    conn = sqlite3.connect(DB_PATH)
+    conn = _get_connection()
     cursor = conn.cursor()
     cursor.execute(
         """SELECT id, nom, prenom, email, telephone, fonction, role, langue, theme,
@@ -322,7 +343,7 @@ def get_all_users():
 
 def update_user_preferences(user_id, langue=None, theme=None):
     """Met à jour langue et/ou thème d'un utilisateur."""
-    conn = sqlite3.connect(DB_PATH)
+    conn = _get_connection()
     cursor = conn.cursor()
     if langue:
         cursor.execute("UPDATE users SET langue = ? WHERE id = ?", (langue, user_id))
@@ -334,7 +355,7 @@ def update_user_preferences(user_id, langue=None, theme=None):
 
 def update_user_role(user_id, new_role):
     """Change le rôle d'un utilisateur (admin)."""
-    conn = sqlite3.connect(DB_PATH)
+    conn = _get_connection()
     cursor = conn.cursor()
     cursor.execute("UPDATE users SET role = ? WHERE id = ?", (new_role, user_id))
     conn.commit()
@@ -343,7 +364,7 @@ def update_user_role(user_id, new_role):
 
 def toggle_user_active(user_id):
     """Active/désactive un utilisateur (admin)."""
-    conn = sqlite3.connect(DB_PATH)
+    conn = _get_connection()
     cursor = conn.cursor()
     cursor.execute("UPDATE users SET actif = NOT actif WHERE id = ?", (user_id,))
     conn.commit()
@@ -352,7 +373,7 @@ def toggle_user_active(user_id):
 
 def delete_user(user_id):
     """Supprime un utilisateur (admin)."""
-    conn = sqlite3.connect(DB_PATH)
+    conn = _get_connection()
     cursor = conn.cursor()
     cursor.execute("DELETE FROM users WHERE id = ?", (user_id,))
     conn.commit()
@@ -361,7 +382,7 @@ def delete_user(user_id):
 
 def save_batch_import(user_id, filename, results):
     """Enregistre les résultats d'un import CSV pour l'utilisateur."""
-    conn = sqlite3.connect(DB_PATH)
+    conn = _get_connection()
     cursor = conn.cursor()
     cursor.execute(
         """INSERT INTO batch_imports (user_id, filename, results)
@@ -376,7 +397,7 @@ def save_batch_import(user_id, filename, results):
 
 def get_batch_imports(user_id, limit=5):
     """Retourne les derniers imports CSV de l'utilisateur."""
-    conn = sqlite3.connect(DB_PATH)
+    conn = _get_connection()
     rows = conn.execute(
         """SELECT id, filename, results, created_at
            FROM batch_imports WHERE user_id = ?
@@ -407,7 +428,7 @@ def get_batch_imports(user_id, limit=5):
 def create_alert(user_id, transaction_data, score, decision, niveau_risque="Élevé"):
     """Crée une alerte de fraude."""
     try:
-        conn = sqlite3.connect(DB_PATH)
+        conn = _get_connection()
         cursor = conn.cursor()
         cursor.execute("""
             INSERT INTO alerts (user_id, transaction_data, score, decision, niveau_risque)
@@ -424,7 +445,7 @@ def create_alert(user_id, transaction_data, score, decision, niveau_risque="Éle
 
 def get_alerts(user_id, unread_only=False, limit=50):
     """Récupère les alertes d'un utilisateur."""
-    conn = sqlite3.connect(DB_PATH)
+    conn = _get_connection()
     cursor = conn.cursor()
     query = """SELECT id, transaction_data, score, decision, niveau_risque,
                       lu, created_at
@@ -456,7 +477,7 @@ def get_alerts(user_id, unread_only=False, limit=50):
 
 def count_unread_alerts(user_id):
     """Compte les alertes non lues."""
-    conn = sqlite3.connect(DB_PATH)
+    conn = _get_connection()
     cursor = conn.cursor()
     cursor.execute(
         "SELECT COUNT(*) FROM alerts WHERE user_id = ? AND lu = 0",
@@ -469,7 +490,7 @@ def count_unread_alerts(user_id):
 
 def mark_alert_read(alert_id):
     """Marque une alerte comme lue."""
-    conn = sqlite3.connect(DB_PATH)
+    conn = _get_connection()
     cursor = conn.cursor()
     cursor.execute("UPDATE alerts SET lu = 1 WHERE id = ?", (alert_id,))
     conn.commit()
@@ -478,7 +499,7 @@ def mark_alert_read(alert_id):
 
 def mark_all_alerts_read(user_id):
     """Marque toutes les alertes comme lues."""
-    conn = sqlite3.connect(DB_PATH)
+    conn = _get_connection()
     cursor = conn.cursor()
     cursor.execute("UPDATE alerts SET lu = 1 WHERE user_id = ?", (user_id,))
     conn.commit()
@@ -487,7 +508,7 @@ def mark_all_alerts_read(user_id):
 
 def delete_alert(alert_id):
     """Supprime une alerte."""
-    conn = sqlite3.connect(DB_PATH)
+    conn = _get_connection()
     cursor = conn.cursor()
     cursor.execute("DELETE FROM alerts WHERE id = ?", (alert_id,))
     conn.commit()
@@ -501,7 +522,7 @@ def delete_alert(alert_id):
 def log_action(user_id, action, details=None, ip_address=None):
     """Enregistre une action dans l'audit log."""
     try:
-        conn = sqlite3.connect(DB_PATH)
+        conn = _get_connection()
         cursor = conn.cursor()
         cursor.execute("""
             INSERT INTO audit_logs (user_id, action, details, ip_address)
@@ -515,7 +536,7 @@ def log_action(user_id, action, details=None, ip_address=None):
 
 def get_audit_logs(user_id=None, limit=100):
     """Récupère les logs d'audit."""
-    conn = sqlite3.connect(DB_PATH)
+    conn = _get_connection()
     cursor = conn.cursor()
     if user_id:
         cursor.execute(
@@ -545,7 +566,7 @@ def get_audit_logs(user_id=None, limit=100):
 
 def get_stats():
     """Retourne les statistiques globales."""
-    conn = sqlite3.connect(DB_PATH)
+    conn = _get_connection()
     cursor = conn.cursor()
 
     cursor.execute("SELECT COUNT(*) FROM users WHERE actif = 1")
