@@ -1,0 +1,32 @@
+agence_id,nom_agence,adresse,ville,code_postal,region,pays,telephone,email,directeur,date_ouverture,type_agence,latitude,longitude
+AG-CAS-01,Agence Casablanca Agdal,"7 rue rue de Laurent, Casablanca",Casablanca,20000,Casablanca-Settat,Maroc,0646913810,agence1@banque.ma,Gérard-Frédéric Joly,2010-03-07,Standard,31.116054,-2.635288
+AG-CAS-02,Agence Casablanca Gueliz,"152 rue boulevard de Fernandez, Casablanca",Casablanca,20000,Casablanca-Settat,Maroc,0666629388,agence2@banque.ma,Pauline-Alexandria Martinez,2009-11-18,Standard,30.148986,-7.81362
+AG-CAS-03,Agence Casablanca Centre,"144 rue rue Bodin, Casablanca",Casablanca,20000,Casablanca-Settat,Maroc,0636687537,agence3@banque.ma,Alexandrie Guilbert de la Auger,2025-03-27,Digitale,33.249422,-4.550585
+AG-CAS-04,Agence Casablanca Massira,"115 rue rue Caroline Pruvost, Casablanca",Casablanca,20000,Casablanca-Settat,Maroc,0689089901,agence4@banque.ma,Adrien-Édouard Rocher,2021-01-27,Premium,34.047152,-9.935012
+AG-CAS-05,Agence Casablanca Anfa,"179 rue chemin Honoré Fabre, Casablanca",Casablanca,20000,Casablanca-Settat,Maroc,0666722344,agence5@banque.ma,Caroline Morin,2019-08-15,Premium,31.389357,-7.846862
+AG-CAS-06,Agence Casablanca Bourgogne,"27 rue chemin Barre, Casablanca",Casablanca,20000,Casablanca-Settat,Maroc,0622448136,agence6@banque.ma,Julie Bertrand du Regnier,2010-12-10,Premium,30.483582,-1.525056
+AG-RAB-01,Agence Rabat Founty,"12 rue rue Françoise Cousin, Rabat",Rabat,10000,Rabat-Salé-Kénitra,Maroc,0671662963,agence7@banque.ma,Maryse Verdier de la Fischer,2009-01-22,Digitale,30.624131,-0.777046
+AG-RAB-02,Agence Rabat Gueliz,"142 rue rue Leleu, Rabat",Rabat,10000,Rabat-Salé-Kénitra,Maroc,0649349722,agence8@banque.ma,Augustin Rey de Gillet,2016-02-25,Digitale,33.092599,-1.382931
+AG-RAB-03,Agence Rabat Ain Sebaa,"181 rue chemin Isaac Lemaître, Rabat",Rabat,10000,Rabat-Salé-Kénitra,Maroc,0619335534,agence9@banque.ma,Françoise Leconte,2015-10-11,Standard,33.306317,-2.269317
+AG-FÈS-01,Agence Fès Gueliz,"60 rue rue de Raynaud, Fès",Fès,8000,Fès-Meknès,Maroc,0623556182,agence10@banque.ma,René Chauveau,2015-01-09,Premium,31.389868,-3.643156
+AG-FÈS-02,Agence Fès Médina,"42 rue avenue Gillet, Fès",Fès,8000,Fès-Meknès,Maroc,0659684848,agence11@banque.ma,Timothée-Roger Vasseur,2017-09-23,Premium,31.047535,-7.330222
+AG-MAR-01,Agence Marrakech Gueliz,"156 rue rue David, Marrakech",Marrakech,10000,Marrakech-Safi,Maroc,0695225343,agence12@banque.ma,Noémi Royer,2008-12-11,Standard,32.670699,-7.551891
+AG-MAR-02,Agence Marrakech Océan,"98 rue boulevard Wagner, Marrakech",Marrakech,10000,Marrakech-Safi,Maroc,0646231783,agence13@banque.ma,Frédérique Bègue,2023-09-06,Digitale,33.44081,-7.803848
+AG-TAN-01,Agence Tanger Bourgogne,"197 rue avenue Guy Aubry, Tanger",Tanger,8000,Tanger-Tétouan-Al Hoceïma,Maroc,0617507864,agence14@banque.ma,Gérard Vallet,2025-01-12,Standard,34.109013,-1.949542
+AG-TAN-02,Agence Tanger Ville Nouvelle,"69 rue boulevard Aurélie Guillon, Tanger",Tanger,8000,Tanger-Tétouan-Al Hoceïma,Maroc,0618883684,agence15@banque.ma,Maryse Vasseur,2011-05-27,Standard,34.565681,-4.328199
+AG-AGA-01,Agence Agadir Bourgogne,"55 rue avenue de Robin, Agadir",Agadir,6000,Souss-Massa,Maroc,0697971488,agence16@banque.ma,Bertrand Brunet,2012-02-20,Premium,31.97816,-0.854524
+AG-AGA-02,Agence Agadir Océan,"37 rue avenue de Godard, Agadir",Agadir,6000,Souss-Massa,Maroc,0645551614,agence17@banque.ma,Léon Weber,2022-08-14,Standard,31.233138,-4.386319
+AG-MEK-01,Agence Meknès Founty,"192 rue chemin de Lenoir, Meknès",Meknès,4000,Fès-Meknès,Maroc,0688461803,agence18@banque.ma,Zacharie Mace,2010-08-04,Premium,34.489114,-6.005995
+AG-OUJ-01,Agence Oujda Massira,"36 rue boulevard de Hamel, Oujda",Oujda,3000,Oriental,Maroc,0678387461,agence19@banque.ma,Tristan-Jean Marie,2016-09-05,Premium,30.454547,-9.528836
+AG-KÉN-01,Agence Kénitra Agdal,"40 rue rue Cécile Bernard, Kénitra",Kénitra,4000,Rabat-Salé-Kénitra,Maroc,0694214382,agence20@banque.ma,Philippe-Emmanuel Guillou,2010-04-25,Standard,33.960397,-5.7784
+AG-TÉT-01,Agence Tétouan Gueliz,"99 rue chemin de Riou, Tétouan",Tétouan,3000,Tanger-Tétouan-Al Hoceïma,Maroc,0661220073,agence21@banque.ma,Élodie de la Besson,2012-03-10,Digitale,34.980607,-4.708857
+AG-SAL-01,Agence Salé Centre,"175 rue boulevard de Martin, Salé",Salé,4000,Rabat-Salé-Kénitra,Maroc,0625374874,agence22@banque.ma,Margot Camus de Marie,2019-01-16,Digitale,34.423942,-2.491222
+AG-NAD-01,Agence Nador Bourgogne,"29 rue rue Bertrand Guillot, Nador",Nador,3000,Oriental,Maroc,0649392920,agence23@banque.ma,Audrey-Aurélie Foucher,2023-03-25,Premium,30.790789,-9.967547
+AG-SET-01,Agence Settat Founty,"129 rue boulevard Gosselin, Settat",Settat,2000,Casablanca-Settat,Maroc,0633978249,agence24@banque.ma,Christophe Delmas,2022-11-12,Digitale,34.563139,-1.294814
+AG-EL -01,Agence El Jadida Val Fleuri,"164 rue rue de Aubry, El Jadida",El Jadida,3000,Casablanca-Settat,Maroc,0678137358,agence25@banque.ma,Pauline de la Gimenez,2013-07-15,Digitale,30.994556,-6.260861
+AG-BÉN-01,Agence Béni Mellal Anfa,"139 rue chemin de Alexandre, Béni Mellal",Béni Mellal,2000,Béni Mellal-Khénifra,Maroc,0681182864,agence26@banque.ma,Sabine Blondel,2022-01-20,Standard,32.994723,-5.113943
+AG-KHO-01,Agence Khouribga Agdal,"93 rue rue Jean, Khouribga",Khouribga,2000,Béni Mellal-Khénifra,Maroc,0651273847,agence27@banque.ma,Jean Lefebvre,2025-07-16,Standard,30.289626,-1.219904
+AG-SAF-01,Agence Safi Gueliz,"22 rue boulevard Vasseur, Safi",Safi,2000,Marrakech-Safi,Maroc,0675228535,agence28@banque.ma,Auguste Neveu,2008-09-11,Standard,34.889922,-4.672938
+AG-MOH-01,Agence Mohammedia Hay Riad,"33 rue rue David, Mohammedia",Mohammedia,2000,Casablanca-Settat,Maroc,0698550256,agence29@banque.ma,Arnaude Buisson,2014-10-16,Premium,34.734243,-8.34873
+AG-LAÂ-01,Agence Laâyoune Palais,"55 rue avenue Marcel Gimenez, Laâyoune",Laâyoune,2000,Laâyoune-Sakia El Hamra,Maroc,0682383095,agence30@banque.ma,Sébastien Verdier,2022-10-11,Digitale,33.449338,-2.87051
+AG-KHE-01,Agence Khemisset Ville Nouvelle,"172 rue avenue Cordier, Khemisset",Khemisset,2000,Rabat-Salé-Kénitra,Maroc,0697225156,agence31@banque.ma,Benoît de Delmas,2021-05-11,Premium,32.1905,-4.824242
